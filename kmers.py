@@ -25,8 +25,9 @@ def get_clumps(genome, k, L, t):
     """
     kmers = KmerSequence(L-k, t)
 
+    kmers_add = kmers.add #microoptimization
     for kmer in sliding_window(genome, k):
-        kmers.add(kmer)
+        kmers_add(kmer)
         
     return kmers.clumps
 
@@ -55,10 +56,7 @@ class KmerSequence(object):
             self.clumps.add(kmer)
 
     def _remove_oldest(self):
-        toremove = self.order.popleft()
-        old_count = self.counts[toremove]
-        self.counts[toremove] -= 1
-
+        self.counts[self.order.popleft()] -= 1
 
 if __name__ == '__main__':
     import sys
