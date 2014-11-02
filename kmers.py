@@ -26,16 +26,8 @@ def get_clumps(genome, k, L, t):
     clumps = set()
     kmers = KmerSequence(L-k)
 
-    # "prime" kmers with the first window
-    for kmer in sliding_window(genome[:L], k):
+    for kmer in sliding_window(genome, k):
         kmers.add(kmer)
-
-    # initial check for clumps
-    clumps |= kmers.above_t(t)
-
-    # now, run the actual algorithm
-    for window in sliding_window(islice(genome, 1, None), L):
-        kmers.add(window[-k:])
         clumps |= kmers.above_t(t)
 
     return clumps
