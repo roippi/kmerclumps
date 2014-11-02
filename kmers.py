@@ -32,6 +32,9 @@ def get_clumps(genome, k, L, t):
     return kmers.clumps
 
 class KmerSequence(object):
+    """
+    Implementation of a sliding-window (of length :limit) which will keep track of kmers in :clumps that reach a certain :threshold.
+    """
     __slots__ = ['order', 'counts', 'limit', 'clumps', 't']
 
     def __init__(self, limit, threshold):
