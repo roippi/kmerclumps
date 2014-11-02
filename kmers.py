@@ -4,8 +4,11 @@ from collections import defaultdict, deque, Counter
 from itertools import islice
 
 def sliding_window(seq, n=2):
-    "Returns a sliding window (of width n) over data from the iterable"
-    "   s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   "
+    """Returns a sliding window (of width n) over data from the iterable
+       s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   
+
+       this function courtesy http://stackoverflow.com/questions/6822725/rolling-or-sliding-window-iterator-in-python
+    """
     it = iter(seq)
     result = tuple(islice(it, n))
     if len(result) == n:
