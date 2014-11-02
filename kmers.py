@@ -23,23 +23,22 @@ def get_clumps(genome, k, L, t):
 
     See http://stackoverflow.com/a/26695030/2581969 for some explanation if that doesn't mean anything to you.
     """
-    clumps = set()
-    kmers = KmerSequence(L-k)
+    kmers = KmerSequence(L-k, t)
 
     for kmer in sliding_window(genome, k):
         kmers.add(kmer)
-        clumps |= kmers.above_t(t)
-
-    return clumps
+        
+    return kmers.clumps
 
 class KmerSequence(object):
-    __slots__ = ['order', 'counts', 'bins', 'limit']
+    __slots__ = ['order', 'counts', 'limit', 'clumps', 't']
 
-    def __init__(self, limit):
+    def __init__(self, limit, threshold):
         self.order = deque()
         self.counts = Counter()
-        self.bins = defaultdict(set)
         self.limit = limit
+        self.clumps = set()
+        self.t = threshold
 
     def add(self, kmer):
         if len(self.order) > self.limit:
@@ -49,24 +48,17 @@ class KmerSequence(object):
     def _add_one(self,kmer):
         self.order.append(kmer)
         old_count = self.counts[kmer]
-        self.counts[kmer] = old_count + 1
-        if old_count > 0:
-            self.bins[old_count].remove(kmer)
-        self.bins[old_count+1].add(kmer)
+        new_count = old_count + 1
+        self.counts[kmer] = new_count
+
+        if new_count == self.t:
+            self.clumps.add(kmer)
 
     def _remove_oldest(self):
         toremove = self.order.popleft()
         old_count = self.counts[toremove]
         self.counts[toremove] -= 1
-        self.bins[old_count].remove(toremove)
-        if old_count > 1:
-            self.bins[old_count-1].add(toremove)
 
-    def above_t(self,t):
-        ret = set()
-        for b in (v for k,v in self.bins.iteritems() if k >= t):
-            ret |= b
-        return ret
 
 if __name__ == '__main__':
     import sys
