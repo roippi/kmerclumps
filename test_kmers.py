@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import unittest
 from kmers import sliding_window
 from kmers import get_clumps
