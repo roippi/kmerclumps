@@ -69,9 +69,7 @@ if __name__ == '__main__':
         k,L,t = map(int, sys.argv[2:])
     else:
         #defaults
-        k = 9
-        L = 500
-        t = 3
+        k,L,t = 9, 500, 3
 
     clumps = get_clumps(genome, k,L,t)
 
