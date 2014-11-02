@@ -34,13 +34,15 @@ def get_clumps(genome, k, L, t):
     clumps |= kmers.above_t(t)
 
     # now, run the actual algorithm
-    for window in sliding_window(genome[1:], L):
+    for window in sliding_window(islice(genome, 1, None), L):
         kmers.add(window[-k:])
         clumps |= kmers.above_t(t)
 
     return clumps
 
 class KmerSequence(object):
+    __slots__ = ['order', 'counts', 'bins', 'limit']
+
     def __init__(self, limit):
         self.order = deque()
         self.counts = Counter()
@@ -70,7 +72,7 @@ class KmerSequence(object):
 
     def above_t(self,t):
         ret = set()
-        for b in (v for k,v in self.bins.items() if k >= t):
+        for b in (v for k,v in self.bins.iteritems() if k >= t):
             ret |= b
         return ret
 
