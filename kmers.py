@@ -51,8 +51,7 @@ class KmerSequence(object):
 
     def _add_one(self,kmer):
         self.order.append(kmer)
-        old_count = self.counts[kmer]
-        new_count = old_count + 1
+        new_count = self.counts[kmer] + 1
         self.counts[kmer] = new_count
 
         if new_count == self.t:
